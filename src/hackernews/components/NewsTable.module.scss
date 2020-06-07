@@ -1,0 +1,75 @@
+$theme-color: #fc6602;
+$table-bgColor-odd: #f5f5ee;
+$table-bgColor-even: #e4e5de;
+
+$primary-color: #060f15;
+$seconday-color: #8c8e90;
+
+$color-danger: #f44336;
+
+.tbl {
+    border-radius: 0.25rem;
+    border-collapse: collapse;
+    width: 100%;
+
+    tbody > tr:nth-child(odd) {
+        background: $table-bgColor-odd;
+    }
+
+    tbody > tr:nth-child(even) {
+        background: $table-bgColor-even;
+    }
+
+    td,
+    th {
+        padding: 0.75rem;
+    }
+
+    th {
+        text-align: left;
+        background-color: $theme-color;
+        color: #ffffff;
+        font-weight: normal;
+    }
+
+    td {
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+        color: $primary-color;
+    }
+}
+
+.goodRating {
+    color: $theme-color;
+}
+
+.avgRating {
+    color: $color-danger;
+}
+
+.secondary {
+    color: $seconday-color;
+    padding: 0 0.5rem;
+}
+
+.byTxt {
+    color: $seconday-color;
+    padding: 0 0.5rem;
+}
+
+.hideTxt {
+    padding: 0 0.5rem;
+    cursor: pointer;
+
+    &::before {
+        content: '[ ';
+    }
+
+    &::after {
+        content: ' ]';
+    }
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
