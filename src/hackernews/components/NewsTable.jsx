@@ -24,9 +24,9 @@ function NewsTable(props) {
 
     const hideNews = (id) => {
         const newTrash = [...trash, id];
-        setTrash(trashName, newTrash);
+        setTrash(newTrash);
 
-        Store.set(newTrash);
+        Store.set(trashName, newTrash);
     };
 
     const upVote = (id) => {
