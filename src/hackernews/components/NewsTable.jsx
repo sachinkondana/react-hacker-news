@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import _ from './Utils.js';
+import _ from './Utils';
+import Store from './Store';
 
 import './icons/style.css';
 import styles from './NewsTable.module.scss';
 
-const tableKey = 'created_at_i';
+const tableKey = 'objectID';
 
 const getPointHighlighterClass = (point) => {
     if (point > 100) return styles.goodRating;
@@ -16,6 +17,18 @@ const getPointHighlighterClass = (point) => {
 
 function NewsTable(props) {
     const { data, onPaginationChange, page, max, hitsPerPage } = props;
+    const [trash, setTrash] = useState(Store.get());
+
+    const hideNews = (id) => {
+        const newTrash = [...trash, id];
+        setTrash(newTrash);
+
+        Store.set(newTrash);
+    };
+
+    const sanitizeData = () => {
+        return data.filter(d => !trash.includes(d[tableKey]));
+    }
 
     const renderNewDeatils = (d) => {
         return (
@@ -25,7 +38,7 @@ function NewsTable(props) {
                 <span className={styles.byTxt}>by</span>
                 <span>{d.author}</span>
                 <span className={styles.secondary}>{moment(d.created_at).startOf('day').fromNow()}</span>
-                <span className={styles.hideTxt}>hide</span>
+                <span className={styles.hideTxt} onClick={() => hideNews(d[tableKey])}>hide</span>
             </>
         );
     };
@@ -58,12 +71,18 @@ function NewsTable(props) {
     });
 
     const rednerEmpty = () => {
-        return <tr><td>No data</td></tr>;
+        return <tr><td colSpan={tableData.length}>No data</td></tr>;
     };
 
-    const renderRows = _.isEmpty(data)
-        ? rednerEmpty()
-        : data.map(d => {
+    
+
+    const renderRows = () => {
+        if(_.isEmpty(data)) return rednerEmpty();
+
+        const displayData = sanitizeData(data);
+        if(_.isEmpty(displayData)) return rednerEmpty();
+
+        return displayData.map(d => {
             const rowKey = d[tableKey];
             const rowContent = tableData.map(({ render, key }, i) => {
                 const cellKey = { key: `${i}-${rowKey}-${key}` };
@@ -79,6 +98,7 @@ function NewsTable(props) {
 
             return <tr key={rowKey}>{rowContent}</tr>
         });
+    };
 
     const renderPagination = () => {
         const showPagination = max > hitsPerPage;
@@ -104,7 +124,7 @@ function NewsTable(props) {
                     <tr>{renderHeader}</tr>
                 </thead>
                 <tbody>
-                    {renderRows}
+                    {renderRows()}
                 </tbody>
             </table>
             {renderPagination()}
