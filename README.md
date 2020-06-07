@@ -1,5 +1,5 @@
 ## Application demo
-https://reactjs-hacker-news.herokuapp.com
+https://reactjs-hacker-news.netlify.app/
 
 ## Available Scripts
 
