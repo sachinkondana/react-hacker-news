@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
+import NewsChart from './NewsChart';
+
 import _ from './Utils';
 import Store from './Store';
 
@@ -22,6 +24,28 @@ function NewsTable(props) {
     const [trash, setTrash] = useState(Store.get(trashName) || []);
     const [upVoteStore, setUpVoteStore] = useState(Store.get(upVoteStoreName) || {});
 
+    const displayData = (() => {
+        if (_.isEmpty(data)) return [];
+
+        const newArray = [];
+
+        data.forEach(d => {
+            const id = d[tableKey];
+
+            if (!trash.includes(id)) {
+                newArray.push({
+                    ...d,
+                    points: d.points + (upVoteStore[id] || 0),
+                });
+            }
+        });
+
+        return newArray;
+    })();
+
+    /**
+     * Handlers
+     */
     const hideNews = (id) => {
         const newTrash = [...trash, id];
         setTrash(newTrash);
@@ -42,10 +66,9 @@ function NewsTable(props) {
         Store.set(upVoteStoreName, tempStore);
     };
 
-    const sanitizeData = () => {
-        return data.filter(d => !trash.includes(d[tableKey]));
-    }
-
+    /**
+     * Render functions
+     */
     const renderNewDeatils = (d) => {
         return (
             <>
@@ -60,11 +83,10 @@ function NewsTable(props) {
     };
 
     const renderVoteCount = (d) => {
-        const votes = d.points + (upVoteStore[d[tableKey]] || 0);
-        const classes = getPointHighlighterClass(votes);
+        const classes = getPointHighlighterClass(d.points);
 
         return (
-            <span className={classes}>{votes}</span>
+            <span className={classes}>{d.points}</span>
         );
     };
 
@@ -93,13 +115,8 @@ function NewsTable(props) {
         return <tr><td colSpan={tableData.length}>No data</td></tr>;
     };
 
-    
-
     const renderRows = () => {
-        if(_.isEmpty(data)) return rednerEmpty();
-
-        const displayData = sanitizeData(data);
-        if(_.isEmpty(displayData)) return rednerEmpty();
+        if (_.isEmpty(displayData)) return rednerEmpty();
 
         return displayData.map(d => {
             const rowKey = d[tableKey];
@@ -127,7 +144,7 @@ function NewsTable(props) {
 
             return (
                 <div className={styles.pagination}>
-                    <button disabled={page===0} onClick={() => onPaginationChange(page - 1)}>Prev</button>
+                    <button disabled={page === 0} onClick={() => onPaginationChange(page - 1)}>Prev</button>
                     |<button disabled={!hasNext} onClick={() => onPaginationChange(page + 1)}>Next</button>
                 </div>
             );
@@ -147,10 +164,14 @@ function NewsTable(props) {
                 </tbody>
             </table>
             {renderPagination()}
+            <NewsChart
+                data={displayData}
+                xAxesKey={tableKey}
+                yAxesKey="points"
+            />
         </>
     );
 }
-
 
 NewsTable.propTypes = {
     data: PropTypes.array,
