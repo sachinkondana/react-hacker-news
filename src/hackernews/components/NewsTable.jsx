@@ -15,7 +15,7 @@ const getPointHighlighterClass = (point) => {
 };
 
 function NewsTable(props) {
-    const { data } = props;
+    const { data, onPaginationChange, page, max, hitsPerPage } = props;
 
     const renderNewDeatils = (d) => {
         return (
@@ -80,25 +80,53 @@ function NewsTable(props) {
             return <tr key={rowKey}>{rowContent}</tr>
         });
 
+    const renderPagination = () => {
+        const showPagination = max > hitsPerPage;
+
+        if (showPagination) {
+            const hasNext = ((page + 1) * hitsPerPage) < max;
+
+            return (
+                <div className={styles.pagination}>
+                    <button disabled={page===0} onClick={() => onPaginationChange(page - 1)}>Prev</button>
+                    |<button disabled={!hasNext} onClick={() => onPaginationChange(page + 1)}>Next</button>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
     return (
-        <table className={styles.tbl}>
-            <thead>
-                <tr>{renderHeader}</tr>
-            </thead>
-            <tbody>
-                {renderRows}
-            </tbody>
-        </table>
+        <>
+            <table className={styles.tbl}>
+                <thead>
+                    <tr>{renderHeader}</tr>
+                </thead>
+                <tbody>
+                    {renderRows}
+                </tbody>
+            </table>
+            {renderPagination()}
+        </>
     );
 }
 
 
 NewsTable.propTypes = {
     data: PropTypes.array,
+    onPaginationChange: PropTypes.func,
+    page: PropTypes.number,
+    max: PropTypes.number,
+    hitsPerPage: PropTypes.number,
 };
 
 NewsTable.defaultProps = {
     data: [],
+    onPaginationChange: null,
+    page: 0,
+    max: 100,
+    hitsPerPage: 20,
 };
 
 
