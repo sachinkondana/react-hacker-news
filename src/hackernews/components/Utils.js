@@ -29,7 +29,7 @@ function get(o, s) {
 }
 
 function getHostname(url) {
-    return (new URL(url)).hostname;
+    return isEmpty(url) ? null : (new URL(url)).hostname;
 }
 
 export default {

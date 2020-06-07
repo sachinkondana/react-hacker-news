@@ -73,3 +73,21 @@ $color-danger: #f44336;
         text-decoration: underline;
     }
 }
+
+.pagination {
+    padding: 1.5rem 0;
+    text-align: right;
+
+    button {
+        font-weight: 700;
+        color: $theme-color;
+        background: none;
+        border: none;
+        padding: 0.5rem 1.5rem;
+        cursor: pointer;
+
+        &:disabled {
+            color: $seconday-color;
+        }
+    }
+}
