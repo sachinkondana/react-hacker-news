@@ -8,22 +8,38 @@ import Store from './Store';
 import './icons/style.css';
 import styles from './NewsTable.module.scss';
 
-const tableKey = 'objectID';
-
 const getPointHighlighterClass = (point) => {
     if (point > 100) return styles.goodRating;
     if (point > 50) return styles.avgRating;
 };
 
+const tableKey = 'objectID';
+const trashName = 'HACKER_trash';
+const upVoteStoreName = 'HACKER_upvote';
+
 function NewsTable(props) {
     const { data, onPaginationChange, page, max, hitsPerPage } = props;
-    const [trash, setTrash] = useState(Store.get());
+    const [trash, setTrash] = useState(Store.get(trashName) || []);
+    const [upVoteStore, setUpVoteStore] = useState(Store.get(upVoteStoreName) || {});
 
     const hideNews = (id) => {
         const newTrash = [...trash, id];
-        setTrash(newTrash);
+        setTrash(trashName, newTrash);
 
         Store.set(newTrash);
+    };
+
+    const upVote = (id) => {
+        const tempStore = { ...upVoteStore };
+
+        if (tempStore[id]) {
+            tempStore[id]++;
+        } else {
+            tempStore[id] = 1;
+        }
+        setUpVoteStore(tempStore);
+
+        Store.set(upVoteStoreName, tempStore);
     };
 
     const sanitizeData = () => {
@@ -44,8 +60,11 @@ function NewsTable(props) {
     };
 
     const renderVoteCount = (d) => {
+        const votes = d.points + (upVoteStore[d[tableKey]] || 0);
+        const classes = getPointHighlighterClass(votes);
+
         return (
-            <span className={getPointHighlighterClass(d.points)}>{d.points}</span>
+            <span className={classes}>{votes}</span>
         );
     };
 
@@ -57,7 +76,7 @@ function NewsTable(props) {
         render: renderVoteCount,
     }, {
         name: 'Up Vote',
-        render: () => <span className="icon-thumb_up_alt"></span>
+        render: (d) => <span className={`icon-thumb_up_alt ${styles.upVote}`} onClick={() => upVote(d[tableKey])}></span>
     }, {
         name: 'News details',
         key: 'points',

@@ -2,14 +2,12 @@
  * This store is specific to Hacker news use case
  */
 
-const trashName = 'HACKER_trash';
-
-function set(value) {
-    localStorage.setItem(trashName, JSON.stringify(value));
+function set(name, value) {
+    localStorage.setItem(name, JSON.stringify(value));
 }
 
-function get() {
-    return JSON.parse(localStorage.getItem(trashName)) || [];
+function get(name) {
+    return JSON.parse(localStorage.getItem(name));
 }
 
 export default {

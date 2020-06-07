@@ -5,7 +5,7 @@ $table-bgColor-even: #e4e5de;
 $primary-color: #060f15;
 $seconday-color: #8c8e90;
 
-$color-danger: #f44336;
+$color-danger: #8e4540;
 
 .tbl {
     border-radius: 0.25rem;
@@ -90,4 +90,9 @@ $color-danger: #f44336;
             color: $seconday-color;
         }
     }
+}
+
+.upVote:hover {
+    cursor: pointer;
+    color: $theme-color;
 }
