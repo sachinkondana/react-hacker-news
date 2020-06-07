@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+
 import NewsTable from './components/NewsTable';
 
 import NewsActions from './actions';
 
-import styles from './HackerNews.module.scss';
-
 
 function HackerNews() {
+  const history = useHistory();
+  const page = parseInt(useParams().page);
+
   const [news, setNews] = useState(null);
-  const [page, setPage] = useState(0);
   const [max, setMax] = useState(100);
 
   useEffect(() => {
@@ -21,7 +23,7 @@ function HackerNews() {
   return (
     <NewsTable
       data={news}
-      onPaginationChange={setPage}
+      onPaginationChange={(p) => history.push(`/${p}`)}
       page={page}
       max={max}
     />
