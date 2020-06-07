@@ -1,6 +1,15 @@
 ## Application demo
 https://reactjs-hacker-news.netlify.app/
 
+## Description
+Hacker News is a community started by Paul Graham for sharing &quot;Anything that good
+hackers would find interesting. That includes more than hacking and startups. If you
+had to reduce it to a sentence, the answer might be: anything that gratifies one&#39;s
+intellectual curiosity.&quot;
+
+## App screens
+![alt text](https://i.ibb.co/6rvMjC0/screencapture-reactjs-hacker-news-netlify-app-0-2020-06-07-23-03-41.png)
+
 ## Available Scripts
 
 In the project directory, you can run:
