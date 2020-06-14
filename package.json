@@ -15,7 +15,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "postbuild": "react-snap",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -34,6 +34,9 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/react": "^10.2.1",
+    "jest-canvas-mock": "^2.2.0",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
     "react-snap": "^1.23.0"
   }
 }
