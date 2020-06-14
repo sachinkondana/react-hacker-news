@@ -98,7 +98,14 @@ function NewsTable(props) {
         render: renderVoteCount,
     }, {
         name: 'Up Vote',
-        render: (d) => <span className={`icon-thumb_up_alt ${styles.upVote}`} onClick={() => upVote(d[tableKey])}></span>
+        render: (d) => (
+            <span
+                className={`icon-thumb_up_alt ${styles.upVote}`}
+                onClick={() => upVote(d[tableKey])}
+                data-testid={`upvote-${d[tableKey]}`}
+            >
+            </span>
+        ),
     }, {
         name: 'News details',
         key: 'points',
@@ -112,7 +119,7 @@ function NewsTable(props) {
     });
 
     const rednerEmpty = () => {
-        return <tr><td colSpan={tableData.length}>No data</td></tr>;
+        return <tr><td data-testid="message" colSpan={tableData.length}>No data</td></tr>;
     };
 
     const renderRows = () => {
@@ -140,12 +147,12 @@ function NewsTable(props) {
         const showPagination = max > hitsPerPage;
 
         if (showPagination) {
-            const hasNext = ((page + 1) * hitsPerPage) < max;
+            const hasNext = !_.isEmpty(data) && ((page + 1) * hitsPerPage) < max;
 
             return (
                 <div className={styles.pagination}>
-                    <button disabled={page === 0} onClick={() => onPaginationChange(page - 1)}>Prev</button>
-                    |<button disabled={!hasNext} onClick={() => onPaginationChange(page + 1)}>Next</button>
+                    <button data-testid="prevBtn" disabled={page === 0} onClick={() => onPaginationChange(page - 1)}>Prev</button>
+                    |<button data-testid="nextBtn" disabled={!hasNext} onClick={() => onPaginationChange(page + 1)}>Next</button>
                 </div>
             );
         }
