@@ -34,6 +34,7 @@
     ]
   },
   "devDependencies": {
+    "jest-canvas-mock": "^2.2.0",
     "react-snap": "^1.23.0"
   }
 }
